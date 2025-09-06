@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEUST Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background: gray;
+    }
+    .center {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    h1 {
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+    button {
+      padding: 20px 25px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      margin-top: 20px;
+      transition: all 0.3s ease;
+    }
+    .blue-btn {
+      background: yellow;
+      color: black;
+    }
+    .blue-btn:active {
+      box-shadow: 0 0 20px blue;
+      transform: scale(0.95);
+    }
+    .red-btn {
+      background: red;
+      color: white;
+    }
+    .red-btn:active {
+      box-shadow: 0 0 20px red;
+      transform: scale(0.95);
+    }
+    #quiz-page {
+      display: none;
+      padding: 20px;
+    }
+    .question {
+      margin: 20px 0;
+      text-align: left;
+    }
+    .choices {
+      margin-left: 20px;
+      text-align: left;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    #try-again-btn {
+      display: none; 
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Welcome Page -->
+ <!-- Welcome Page -->
+<div id="welcome-page" class="center">
+  <div style="background: orange; color: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); text-align: center;">
+    <img src="cropped-neust_logo-1-1.png" alt="error" width="300" height="300">
+    <strong>
+      <h0>WELCOME MGA KA GROUP 5</h0>
+    </strong>
+    <h1>[REPUBLIC ACT NO. 9163] Question Generator</h1>
+    <button class="blue-btn" onclick="startQuiz()">Start</button>
+  </div>
+  <strong>
+  <h0>By: Louie Madrid</h0></strong>
+</div>
+
+  <!-- Quiz Page -->
+  <div id="quiz-page">
+    <h2>[REPUBLIC ACT NO. 9163] questions</h2>
+    <h3>___________________________________</h3>
+    <form id="quiz-form"></form>
+    <button type="button" class="blue-btn" onclick="submitQuiz()">Submit</button>
+    <div id="result"></div>
+    <button id="try-again-btn" class="red-btn" onclick="tryAgain()">Try Again</button>
+  </div>
+
+  <script>
+    const questionsBank = [
+  { question: "What is Republic Act No. 9163 also known as?", choices: ["A. NSTP Act of 2001", "B. ROTC Law", "C. Literacy Service Act", "D. Civic Welfare Act"], answer: "A" },
+  { question: "When was the NSTP Act of 2001 enacted?", choices: ["A. 1995", "B. 2001", "C. 2002", "D. 2003"], answer: "C" },
+  { question: "What is the prime duty of the government as stated in RA 9163?", choices: ["A. Educate its people", "B. Serve and protect its citizens", "C. Provide jobs", "D. Build schools"], answer: "B" },
+  { question: "What is the responsibility of citizens under this Act?", choices: ["A. Pay taxes", "B. Defend the security of the state", "C. Obey traffic laws", "D. Study hard"], answer: "B" },
+  { question: "What role does the youth play in nation-building according to RA 9163?", choices: ["A. Passive role", "B. Vital role", "C. Limited role", "D. Minor role"], answer: "B" },
+
+  { question: "What is the National Service Training Program (NSTP)?", choices: ["A. A sports program", "B. A program for enhancing civic consciousness and defense preparedness", "C. A military school", "D. A technical course"], answer: "B" },
+  { question: "What are the three (3) components of the NSTP?", choices: ["A. ROTC, CWTS, LTS", "B. ROTC, PE, Health", "C. CWTS, PE, Values", "D. ROTC, Math, English"], answer: "A" },
+  { question: "Define the Reserve Officers’ Training Corps (ROTC).", choices: ["A. Military training for tertiary students", "B. Sports training", "C. Leadership camp", "D. Academic course"], answer: "A" },
+  { question: "Define Literacy Training Service (LTS).", choices: ["A. Teaching music", "B. Teaching literacy and numeracy", "C. Teaching PE", "D. Teaching arts"], answer: "B" },
+  { question: "Define Civic Welfare Training Service (CWTS).", choices: ["A. Military drills", "B. Activities for community welfare", "C. Literacy only", "D. Fire training"], answer: "B" },
+  { question: "What does 'program components' mean under RA 9163?", choices: ["A. The three service components of NSTP", "B. Academic subjects", "C. Scholarships", "D. School fees"], answer: "A" },
+
+  { question: "What courses are covered by the NSTP?", choices: ["A. Elementary", "B. High School", "C. Baccalaureate and 2-year technical courses", "D. Kindergarten"], answer: "C" },
+  { question: "Is NSTP a requirement for graduation?", choices: ["A. Yes", "B. No", "C. Only for ROTC", "D. Only for private schools"], answer: "A" },
+  { question: "Who are required to take NSTP?", choices: ["A. Only males", "B. Only females", "C. All male and female students", "D. Only scholars"], answer: "C" },
+  { question: "How many semesters must students take NSTP?", choices: ["A. 1", "B. 2", "C. 3", "D. 4"], answer: "B" },
+  { question: "Can NSTP be offered as a summer program?", choices: ["A. Yes", "B. No", "C. Only for ROTC", "D. Only for CWTS"], answer: "A" },
+
+  { question: "What is the primary focus of ROTC under NSTP?", choices: ["A. Dance training", "B. Patriotism and defense preparedness", "C. Environmental care", "D. Literacy"], answer: "B" },
+  { question: "What activities are included under CWTS?", choices: ["A. Health, education, environment, safety", "B. Drills and marching", "C. Literacy only", "D. Technical jobs"], answer: "A" },
+  { question: "Who are the beneficiaries of the LTS program?", choices: ["A. Farmers", "B. School children and out-of-school youth", "C. Business owners", "D. Government workers"], answer: "B" },
+  { question: "How does NSTP instill citizenship training among students?", choices: ["A. Through exams", "B. By teaching patriotism and public service", "C. By enforcing laws", "D. By teaching only military drills"], answer: "B" },
+
+  { question: "Who supervises the design and implementation of NSTP?", choices: ["A. Students", "B. School authorities and CHED/TESDA", "C. Mayors", "D. Parents"], answer: "B" },
+  { question: "Which institutions are required to offer NSTP?", choices: ["A. Only public schools", "B. All higher and technical-vocational institutions", "C. Only private schools", "D. Only TESDA centers"], answer: "B" },
+  { question: "Are State Universities and Colleges required to offer ROTC?", choices: ["A. Yes", "B. No", "C. Only private schools", "D. Only CHED schools"], answer: "A" },
+  { question: "What is the minimum number of cadets required for private schools to offer ROTC?", choices: ["A. 100", "B. 200", "C. 350", "D. 500"], answer: "C" },
+  { question: "What is meant by clustering of students in NSTP?", choices: ["A. Grouping students from different schools", "B. Dividing subjects", "C. Organizing clubs", "D. Combining ROTC with CWTS"], answer: "A" },
+
+  { question: "Can schools collect fees for NSTP?", choices: ["A. No fees at all", "B. Only up to 50% of tuition per unit", "C. Unlimited fees", "D. Depends on school"], answer: "B" },
+  { question: "What is the maximum tuition fee percentage allowed for NSTP units?", choices: ["A. 25%", "B. 50%", "C. 75%", "D. 100%"], answer: "B" },
+  { question: "Who provides assistance and incentives for ROTC students?", choices: ["A. CHED", "B. TESDA", "C. DND", "D. DepEd"], answer: "C" },
+  { question: "What type of insurance must be provided for NSTP students?", choices: ["A. Car insurance", "B. Group health and accident insurance", "C. Fire insurance", "D. Travel insurance"], answer: "B" },
+  { question: "What is the Special Scholarship Program under RA 9163?", choices: ["A. For athletes", "B. For NSTP students", "C. For teachers", "D. For government workers"], answer: "B" },
+
+  { question: "What is the National Service Reserve Corps (NSRC)?", choices: ["A. ROTC graduates", "B. Graduates of LTS and CWTS", "C. Teachers", "D. Policemen"], answer: "B" },
+  { question: "Who composes the NSRC?", choices: ["A. LTS and CWTS graduates", "B. ROTC graduates", "C. TESDA students", "D. Government employees"], answer: "A" },
+  { question: "What activities can the NSRC graduates be tapped for?", choices: ["A. Sports", "B. Literacy and civic welfare", "C. Business", "D. Military only"], answer: "B" },
+  { question: "What is the role of ROTC graduates after completing the program?", choices: ["A. Citizens Armed Forces", "B. Teachers", "C. Scholars", "D. Entrepreneurs"], answer: "A" },
+
+  { question: "Who is responsible for drafting the Implementing Rules of RA 9163?", choices: ["A. DepEd", "B. DND, CHED, and TESDA", "C. Local government", "D. Schools only"], answer: "B" },
+  { question: "Within how many days should the Implementing Rules be adopted?", choices: ["A. 30 days", "B. 60 days", "C. 90 days", "D. 120 days"], answer: "B" },
+  { question: "Who should the CHED, TESDA, and DND consult in drafting the rules?", choices: ["A. Farmers", "B. PASUC, COCOPEA, NGOs, student orgs", "C. Only students", "D. Only teachers"], answer: "B" },
+  { question: "What options do students who have yet to complete Basic ROTC have?", choices: ["A. Stop studying", "B. Continue ROTC or shift to another NSTP component", "C. Take another exam", "D. Skip NSTP"], answer: "B" },
+  { question: "What happens if a student shifts from ROTC to another NSTP component?", choices: ["A. ROTC units are lost", "B. ROTC units are credited but must finish new component", "C. ROTC is repeated", "D. No credit given"], answer: "B" },
+  { question: "What does Section 14 state about the suspension of ROTC as a requirement for graduation?", choices: ["A. ROTC remains required", "B. ROTC lifted for those who already completed academic units", "C. ROTC optional for all", "D. ROTC only for males"], answer: "B" },
+
+  { question: "What is the separability clause in RA 9163?", choices: ["A. Invalid parts removed, rest remain valid", "B. Entire law void", "C. NSTP ends", "D. All laws repealed"], answer: "A" },
+  { question: "What is the amendatory clause in RA 9163?", choices: ["A. Repeals inconsistent laws", "B. Adds new NSTP", "C. Ends NSTP", "D. Creates new law"], answer: "A" },
+  { question: "When did RA 9163 officially take effect?", choices: ["A. After 7 days", "B. After 15 days of publication", "C. After 30 days", "D. Immediately"], answer: "B" },
+  { question: "What school year did the implementation of RA 9163 begin?", choices: ["A. 2000-2001", "B. 2001-2002", "C. 2002-2003", "D. 2003-2004"], answer: "C" },
+
+  // Bonus question
+  { question: "Who is your NSTP subject teacher?", choices: ["A. Jherald Castro", "B. Luke Bautista", "C. Michael Magtuto", "D. Russell Mike Bernardo"], answer: "A" }
+];
+
+
+    let currentQuestions = [];
+
+    function startQuiz() {
+      document.getElementById("welcome-page").style.display = "none";
+      document.getElementById("quiz-page").style.display = "block";
+      generateQuiz();
+    }
+
+    function generateQuiz() {
+      const quizForm = document.getElementById("quiz-form");
+      quizForm.innerHTML = "";
+      document.getElementById("result").innerHTML = "";
+      document.getElementById("try-again-btn").style.display = "none"; // hide again on new quiz
+
+      // Random picks
+      currentQuestions = questionsBank.sort(() => 0.8 - Math.random()).slice(0, 8);
+
+      currentQuestions.forEach((q, index) => {
+        let questionHTML = `<div class="question"><p><b>Q${index + 1}:</b> ${q.question}</p>`;
+        q.choices.forEach(choice => {
+          questionHTML += `
+            <div class="choices">
+              <label><input type="radio" name="q${index}" value="${choice.charAt(0)}"> ${choice}</label>
+            </div>`;
+        });
+        questionHTML += `</div>`;
+        quizForm.innerHTML += questionHTML;
+      });
+    }
+
+    function submitQuiz() {
+      const answers = document.querySelectorAll("input[type=radio]:checked");
+      let score = 0;
+      let correctNumbers = [];
+      let wrongNumbers = [];
+
+      answers.forEach((answer, index) => {
+        const questionIndex = parseInt(answer.name.replace("q", ""));
+        const question = currentQuestions[questionIndex];
+        if (answer.value === question.answer) {
+          score++;
+          correctNumbers.push(questionIndex + 1);
+        } else {
+          wrongNumbers.push(questionIndex + 1);
+        }
+      });
+
+      let result = `Your Score: ${score} / ${currentQuestions.length}<br>`;
+      if (correctNumbers.length > 0) {
+        result += `Correct: ${correctNumbers.join(", ")}<br>`;
+      }
+      if (wrongNumbers.length > 0) {
+        result += `Wrong: ${wrongNumbers.join(", ")}`;
+      }
+
+      document.getElementById("result").innerHTML = result;
+      document.getElementById("try-again-btn").style.display = "inline-block"; // show Try Again only now
+    }
+
+    function tryAgain() {
+      generateQuiz();
+    }
+  </script>
+
+</body>
+</html>
